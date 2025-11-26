@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://diqi83xaoiolx"]
+
+[ext_resource type="Texture2D" uid="uid://bmaho77d6qsin" path="res://icon.svg" id="2_nrb53"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nrb53"]
+friction = 0.5
+rough = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bv2iq"]
+size = Vector2(64, 8)
+
+[node name="Pog" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_nrb53")
+continuous_cd = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+position = Vector2(32, 4)
+scale = Vector2(0.5, 0.062499996)
+texture = ExtResource("2_nrb53")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(32, 4)
+shape = SubResource("RectangleShape2D_bv2iq")

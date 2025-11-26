@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://diqi83xaoiolx"]
+
+[ext_resource type="Script" uid="uid://df4pyk0qaw8ln" path="res://scripts/pog.gd" id="1_nrb53"]
+[ext_resource type="Texture2D" uid="uid://bmaho77d6qsin" path="res://icon.svg" id="2_nrb53"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nrb53"]
+friction = 0.5
+rough = true
+bounce = 0.2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bv2iq"]
+size = Vector2(64, 8)
+
+[node name="Pog" type="RigidBody2D" groups=["pog"]]
+physics_material_override = SubResource("PhysicsMaterial_nrb53")
+continuous_cd = 2
+linear_damp = 10.0
+angular_damp = 6.0
+script = ExtResource("1_nrb53")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 4)
+scale = Vector2(0.5, 0.0625)
+texture = ExtResource("2_nrb53")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 4)
+shape = SubResource("RectangleShape2D_bv2iq")

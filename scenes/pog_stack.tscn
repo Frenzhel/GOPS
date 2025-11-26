@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7m8w3aab225x"]
+
+[ext_resource type="Script" uid="uid://dtho705h2nv3k" path="res://scripts/pog_stack.gd" id="1_wst1x"]
+
+[node name="PogStack" type="Node2D"]
+script = ExtResource("1_wst1x")

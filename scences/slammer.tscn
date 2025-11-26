@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1xcbfm1d0qk4"]
+
+[ext_resource type="Texture2D" uid="uid://c13c1sgmgy63e" path="res://icon.svg" id="1_mgqoa"]
+[ext_resource type="Script" uid="uid://cddah0tf07yel" path="res://scripts/slammer.gd" id="1_mwff7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mwff7"]
+size = Vector2(64, 8)
+
+[node name="slammer" type="RigidBody2D"]
+mass = 2.0
+gravity_scale = 3.0
+script = ExtResource("1_mwff7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 4)
+scale = Vector2(0.5, 0.062499996)
+texture = ExtResource("1_mgqoa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 4)
+shape = SubResource("RectangleShape2D_mwff7")
+
+[node name="AimerLine" type="Line2D" parent="."]
