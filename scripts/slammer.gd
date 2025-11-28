@@ -2,6 +2,8 @@ extends RigidBody2D
 
 signal shot_finished
 
+enum SlammerType { HEAVY, LIGHT, BALANCED }
+
 var dragging := false
 var drag_anchor := Vector2.ZERO
 var current_mouse := Vector2.ZERO
@@ -15,6 +17,7 @@ var default_rotation := 0.0
 var can_drag := false
 
 var shot_taken := false
+var slammer_type := SlammerType.BALANCED
 
 @onready var sprite := $Sprite2D
 
@@ -26,6 +29,24 @@ func _ready():
 	gravity_scale = 0
 	contact_monitor = true
 	max_contacts_reported = 10
+	set_slammer_type(slammer_type)
+
+func set_slammer_type(type: SlammerType):
+	slammer_type = type
+	print("Setting slammer type to: ", type)
+	match type:
+		SlammerType.HEAVY:
+			mass = 5.0
+			power = 5
+			print("Slammer mass: ", mass, " power: ", power)
+		SlammerType.LIGHT:
+			mass = 1.0
+			power = 15
+			print("Slammer mass: ", mass, " power: ", power)
+		SlammerType.BALANCED:
+			mass = 2.5
+			power = 10
+			print("Slammer mass: ", mass, " power: ", power)
 
 func reset_for_turn(player := 1):
 	linear_velocity = Vector2.ZERO

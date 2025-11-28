@@ -1,5 +1,7 @@
 extends Node
 
+enum SlammerType { HEAVY, LIGHT, BALANCED }
+
 var current_player := 1
 var waiting_for_shot := true
 var waiting_for_stack := false
@@ -11,8 +13,9 @@ var wins1 := 0
 var wins2 := 0
 var current_round := 1
 var max_rounds := 3
+var selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.BALANCED
 
-@onready var slammer := $Slammer
+@onready var slammer: RigidBody2D = $Slammer
 @onready var pog_stack := $PogStack
 @onready var player1_label := $CanvasLayer/Scores/Player1Score
 @onready var player2_label := $CanvasLayer/Scores/Player2Score
@@ -24,6 +27,10 @@ var max_rounds := 3
 @onready var menu_panel := $CanvasLayer/Menu
 @onready var play_button := $CanvasLayer/Menu/PlayButton
 @onready var exit_button := $CanvasLayer/Menu/ExitButton
+@onready var slammer_selection_panel := $CanvasLayer/SlammerSelection
+@onready var game_heavy_button := $CanvasLayer/SlammerSelection/HeavyButton
+@onready var game_light_button := $CanvasLayer/SlammerSelection/LightButton
+@onready var game_balanced_button := $CanvasLayer/SlammerSelection/BalancedButton
 @onready var player1_wins_label := $CanvasLayer/Scores/Player1Wins
 @onready var player2_wins_label := $CanvasLayer/Scores/Player2Wins
 @onready var current_round_label := $CanvasLayer/Scores/CurrentRound
@@ -34,6 +41,9 @@ func _ready():
 	flip_timer.timeout.connect(_on_flip_timer_timeout)
 	play_button.pressed.connect(_on_play_pressed)
 	exit_button.pressed.connect(_on_exit_pressed)
+	game_heavy_button.pressed.connect(_on_heavy_pressed)
+	game_light_button.pressed.connect(_on_light_pressed)
+	game_balanced_button.pressed.connect(_on_balanced_pressed)
 	play_again_button.pressed.connect(_on_play_again_pressed)
 	return_to_menu_button.pressed.connect(_on_return_to_menu_pressed)
 	menu_panel.visible = true
@@ -44,6 +54,8 @@ func _ready():
 	current_round_label.visible = false
 	pog_stack.visible = false
 	slammer.visible = false
+	slammer_selection_panel.visible = false
+	selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.BALANCED
 
 func _on_shot_finished():
 	print("Player", current_player, "shot the slammer")
@@ -52,6 +64,7 @@ func _on_shot_finished():
 	slammer.can_drag = false
 	waiting_for_stack = true
 	pog_stack.loosen_stack()
+	slammer_selection_panel.visible = false
 
 func _next_turn():
 	print("Next turn for Player", current_player)
@@ -100,6 +113,7 @@ func _start_turn():
 	waiting_for_shot = false
 	slammer.can_drag = true
 	slammer.reset_for_turn(current_player)
+	slammer_selection_panel.visible = true
 
 func _end_round(round_winner: int):
 	print("Round", current_round, "won by Player", round_winner)
@@ -172,6 +186,10 @@ func _on_play_pressed():
 	player1_wins_label.visible = true
 	player2_wins_label.visible = true
 	current_round_label.visible = true
+	slammer.visible = true
+	pog_stack.visible = true
+	print("Selected slammer type: ", selected_slammer_type)
+	slammer.set_slammer_type(selected_slammer_type)
 	_start_turn()
 
 func _on_exit_pressed():
@@ -201,5 +219,20 @@ func _on_return_to_menu_pressed():
 	player2_wins_label.text = "Wins: 0"
 	current_round_label.text = "Round: 1"
 	slammer.can_drag = false
+	slammer.visible = false
+	pog_stack.visible = false
+	slammer_selection_panel.visible = false
 	for pog in pog_stack.get_children():
 		pog.queue_free()
+
+func _on_heavy_pressed():
+	selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.HEAVY
+	slammer.set_slammer_type(selected_slammer_type)
+
+func _on_light_pressed():
+	selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.LIGHT
+	slammer.set_slammer_type(selected_slammer_type)
+
+func _on_balanced_pressed():
+	selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.BALANCED
+	slammer.set_slammer_type(selected_slammer_type)
