@@ -16,6 +16,8 @@ var can_drag := false
 
 var shot_taken := false
 
+@onready var sprite := $Sprite2D
+
 var target_position: Vector2
 
 func _ready():
@@ -27,23 +29,44 @@ func _ready():
 
 func reset_for_turn(player := 1):
 	linear_velocity = Vector2.ZERO
-	angular_velocity = 0.0	
+	angular_velocity = 0.0    
 	rotation = default_rotation
 	gravity_scale = 0
 	shot_taken = false
-
-	@warning_ignore("int_as_enum_without_match", "int_as_enum_without_cast")
 	freeze_mode = 0
 
+	# Load shader
+	var shader := load("res://shaders/neon_shader.gdshader")
+	var mat := ShaderMaterial.new()
+	mat.shader = shader
+
 	if player == 1:
-		target_position = Vector2(256, 300)
+		target_position = Vector2(456, 300)
+		mat.set_shader_parameter("neon_color", Color(0.0, 0.584, 0.616, 1.0)) # neon blue
 	else:
-		target_position = Vector2(832, 300)
+		target_position = Vector2(632, 300)
+		mat.set_shader_parameter("neon_color", Color(0.983, 0.0, 0.0, 1.0)) # neon red
+
+	# Initial parameters
+	mat.set_shader_parameter("glow_strength", 10.0)
+	mat.set_shader_parameter("outline_thickness", 6.0)
+	sprite.material = mat
+
+	# Pulse outline thickness
+	var tween = create_tween()
+	tween.set_loops()
+
+	var tw1 = tween.tween_property(mat, "shader_parameter/outline_thickness", 4.0, 1.0)
+	tw1.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	var tw2 = tween.tween_property(mat, "shader_parameter/outline_thickness", 2.0, 1.0)
+	tw2.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	transform.origin = target_position
 	sleeping = false
 	dragging = false
 	settle_timer = 0.0
+
 
 func _input(event):
 	if not can_drag:
@@ -55,13 +78,11 @@ func _input(event):
 					dragging = true
 					drag_anchor = global_position
 					current_mouse = event.position
-					@warning_ignore("int_as_enum_without_match", "int_as_enum_without_cast")
 					freeze_mode = 1
 					gravity_scale = 0
 			else:
 				if dragging:
 					dragging = false
-					@warning_ignore("int_as_enum_without_cast", "int_as_enum_without_match")
 					freeze_mode = 0
 					_shoot(event.position)
 	elif event is InputEventMouseMotion:
@@ -76,7 +97,6 @@ func _integrate_forces(state):
 
 		state.transform.origin = drag_anchor + offset
 		$Line2D.points = [-offset, Vector2.ZERO]
-		@warning_ignore("int_as_enum_without_match", "int_as_enum_without_cast")
 		freeze_mode = 1
 		linear_velocity = Vector2.ZERO
 		angular_velocity = 0
@@ -85,10 +105,8 @@ func _integrate_forces(state):
 		$Line2D.points = []
 		if not shot_taken:
 			state.transform.origin = target_position
-			@warning_ignore("int_as_enum_without_cast", "int_as_enum_without_match")
 			freeze_mode = 1
 		else:
-			@warning_ignore("int_as_enum_without_cast", "int_as_enum_without_match")
 			freeze_mode = 0
 
 	if not shot_taken:
@@ -109,16 +127,8 @@ func _shoot(mouse_pos: Vector2):
 	dir = dir.normalized() * min(dir.length(), max_stretch) * power
 	apply_impulse(dir)
 	gravity_scale = 1
-	@warning_ignore("int_as_enum_without_match", "int_as_enum_without_cast")
 	freeze_mode = 2  # DISABLED
-	
 	shot_taken = true
-	
-#func _on_slammer_body_entered(body):
-	#if body.is_in_group("pog"):
-		#var stack = get_tree().get_root().find_child("PogStack", true, false)
-		#if stack:
-			#stack.loosen_stack()
 
 func _on_body_entered(body):
 	if body.is_in_group("pog"):

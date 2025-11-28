@@ -6,12 +6,13 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nrb53"]
 friction = 0.5
 rough = true
-bounce = 0.2
+bounce = 0.3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bv2iq"]
 size = Vector2(64, 8)
 
 [node name="Pog" type="RigidBody2D" groups=["pog"]]
+mass = 0.2
 physics_material_override = SubResource("PhysicsMaterial_nrb53")
 continuous_cd = 2
 linear_damp = 10.0

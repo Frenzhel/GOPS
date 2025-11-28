@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dcm2vavo8ifym"]
+[gd_scene load_steps=6 format=3 uid="uid://dcm2vavo8ifym"]
 
 [ext_resource type="Script" uid="uid://bvtk1d654m3lp" path="res://scripts/slammer.gd" id="1_qp5bv"]
 [ext_resource type="Texture2D" uid="uid://bmaho77d6qsin" path="res://icon.svg" id="2_60eae"]
@@ -9,6 +9,10 @@ bounce = 0.3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3nnse"]
 size = Vector2(64, 8)
+
+[sub_resource type="Environment" id="Environment_60eae"]
+glow_enabled = true
+glow_strength = 1.2
 
 [node name="Slammer" type="RigidBody2D"]
 position = Vector2(0, -8)
@@ -28,5 +32,8 @@ position = Vector2(32, 4)
 shape = SubResource("RectangleShape2D_3nnse")
 
 [node name="Line2D" type="Line2D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_60eae")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -21,7 +21,7 @@ func spawn_stack():
 		var cap = cap_scene.instantiate()
 
 		if cap is RigidBody2D:
-			cap.linear_damp = 12
+			cap.linear_damp = 15
 
 		var base_y = -i * (cap_height * 0.90)
 		cap.global_position = stack_position + Vector2(0, base_y)
@@ -41,7 +41,7 @@ func spawn_stack():
 func loosen_stack():
 	for cap in get_children():
 		if cap is RigidBody2D:
-			cap.linear_damp = 10.0
+			cap.linear_damp = 12.0
 	set_physics_process(true)
 	settle_timer = 0.0
 
