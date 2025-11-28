@@ -26,7 +26,6 @@ func spawn_stack():
 		var base_y = -i * (cap_height * 0.90)
 		cap.global_position = stack_position + Vector2(0, base_y)
 
-		# tiny imperfections
 		cap.global_position += Vector2(
 			randf_range(-micro_pos, micro_pos),
 			randf_range(-micro_pos, micro_pos)
@@ -56,7 +55,7 @@ func restack_unflipped():
 		cap.queue_free()
 
 	count = unflipped_count
-	# Spawn perfect stack without imperfections
+
 	for i in range(count):
 		var cap = cap_scene.instantiate()
 
@@ -66,7 +65,6 @@ func restack_unflipped():
 		var base_y = -i * (cap_height * 0.90)
 		cap.global_position = stack_position + Vector2(0, base_y)
 
-		# No imperfections for restack
 		cap.rotation = 0
 
 		add_child(cap)

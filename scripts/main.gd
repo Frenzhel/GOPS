@@ -207,7 +207,6 @@ func _on_return_to_menu_pressed():
 	player1_wins_label.visible = false
 	player2_wins_label.visible = false
 	current_round_label.visible = false
-	# Reset game state
 	score1 = 0
 	score2 = 0
 	wins1 = 0

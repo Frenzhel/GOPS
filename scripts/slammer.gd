@@ -56,7 +56,6 @@ func reset_for_turn(player := 1):
 	shot_taken = false
 	freeze_mode = 0
 
-	# Load shader
 	var shader := load("res://shaders/neon_shader.gdshader")
 	var mat := ShaderMaterial.new()
 	mat.shader = shader
@@ -68,12 +67,10 @@ func reset_for_turn(player := 1):
 		target_position = Vector2(632, 300)
 		mat.set_shader_parameter("neon_color", Color(0.983, 0.0, 0.0, 1.0)) # neon red
 
-	# Initial parameters
 	mat.set_shader_parameter("glow_strength", 10.0)
 	mat.set_shader_parameter("outline_thickness", 6.0)
 	sprite.material = mat
 
-	# Pulse outline thickness
 	var tween = create_tween()
 	tween.set_loops()
 
@@ -134,7 +131,6 @@ func _integrate_forces(state):
 		state.transform = Transform2D(default_rotation, target_position)
 		return
 
-	# Detect slammer has settled
 	if linear_velocity.length() < settle_velocity:
 		settle_timer += state.step
 		if settle_timer >= settle_time:
@@ -148,7 +144,7 @@ func _shoot(mouse_pos: Vector2):
 	dir = dir.normalized() * min(dir.length(), max_stretch) * power
 	apply_impulse(dir)
 	gravity_scale = 1
-	freeze_mode = 2  # DISABLED
+	freeze_mode = 2
 	shot_taken = true
 
 func _on_body_entered(body):
