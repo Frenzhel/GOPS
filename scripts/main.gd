@@ -13,6 +13,7 @@ var wins1 := 0
 var wins2 := 0
 var current_round := 1
 var max_rounds := 3
+var stack_count := 0
 var selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.BALANCED
 
 @onready var slammer: RigidBody2D = $Slammer
@@ -34,6 +35,7 @@ var selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.BALA
 @onready var player1_wins_label := $CanvasLayer/Scores/Player1Wins
 @onready var player2_wins_label := $CanvasLayer/Scores/Player2Wins
 @onready var current_round_label := $CanvasLayer/Scores/CurrentRound
+@onready var stack_button := $CanvasLayer/SlammerSelection/StackButton
 
 func _ready():
 	slammer.shot_finished.connect(_on_shot_finished)
@@ -44,6 +46,7 @@ func _ready():
 	game_heavy_button.pressed.connect(_on_heavy_pressed)
 	game_light_button.pressed.connect(_on_light_pressed)
 	game_balanced_button.pressed.connect(_on_balanced_pressed)
+	stack_button.pressed.connect(_on_stack_pressed)
 	play_again_button.pressed.connect(_on_play_again_pressed)
 	return_to_menu_button.pressed.connect(_on_return_to_menu_pressed)
 	menu_panel.visible = true
@@ -97,11 +100,11 @@ func _on_flip_timer_timeout():
 	if player2_wins_label:
 		player2_wins_label.text = "Wins: " + str(wins2)
 
-	if score1 > 0:
+	if score1 > 7:
 		if current_player == 1:
 			wins1 += 1
 		_end_round(1)
-	elif score2 > 0:
+	elif score2 > 7:
 		if current_player == 2:
 			wins2 += 1
 		_end_round(2)
@@ -131,6 +134,7 @@ func _start_new_round():
 	waiting_for_shot = true
 	waiting_for_stack = false
 	last_shooter = 1
+	stack_count = 0
 	player1_label.text = "Player 1: 0"
 	player2_label.text = "Player 2: 0"
 	player1_wins_label.text = "Wins: " + str(wins1)
@@ -236,3 +240,9 @@ func _on_light_pressed():
 func _on_balanced_pressed():
 	selected_slammer_type = preload("res://scripts/slammer.gd").SlammerType.BALANCED
 	slammer.set_slammer_type(selected_slammer_type)
+
+func _on_stack_pressed():
+	if stack_count < 2 and score1 < 8 and score2 < 8 and not waiting_for_shot:
+		pog_stack.restack_unflipped()
+		stack_count += 1
+		print("Player", current_player, "restacked pogs. Stack count:", stack_count)

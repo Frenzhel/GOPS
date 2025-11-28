@@ -45,6 +45,32 @@ func loosen_stack():
 	set_physics_process(true)
 	settle_timer = 0.0
 
+func restack_unflipped():
+	var unflipped_count = 0
+	for cap in get_children():
+		if abs(cap.rotation_degrees) <= 100:
+			unflipped_count += 1
+
+	for cap in get_children():
+		remove_child(cap)
+		cap.queue_free()
+
+	count = unflipped_count
+	# Spawn perfect stack without imperfections
+	for i in range(count):
+		var cap = cap_scene.instantiate()
+
+		if cap is RigidBody2D:
+			cap.linear_damp = 15
+
+		var base_y = -i * (cap_height * 0.90)
+		cap.global_position = stack_position + Vector2(0, base_y)
+
+		# No imperfections for restack
+		cap.rotation = 0
+
+		add_child(cap)
+
 func _physics_process(delta):
 	var all_settled = true
 	for cap in get_children():

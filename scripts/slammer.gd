@@ -37,11 +37,11 @@ func set_slammer_type(type: SlammerType):
 	match type:
 		SlammerType.HEAVY:
 			mass = 5.0
-			power = 5
+			power = 10
 			print("Slammer mass: ", mass, " power: ", power)
 		SlammerType.LIGHT:
-			mass = 1.0
-			power = 15
+			mass = 2.0
+			power = 10
 			print("Slammer mass: ", mass, " power: ", power)
 		SlammerType.BALANCED:
 			mass = 2.5
